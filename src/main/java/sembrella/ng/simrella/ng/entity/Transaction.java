@@ -3,7 +3,6 @@ package sembrella.ng.simrella.ng.entity;
 import jakarta.persistence.*;
 import sembrella.ng.simrella.ng.enums.TransactionType;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Entity
