@@ -6,13 +6,16 @@ import sembrella.ng.simrella.ng.dto.TransactionDto;
 import sembrella.ng.simrella.ng.entity.Loan;
 import sembrella.ng.simrella.ng.entity.Transaction;
 import sembrella.ng.simrella.ng.entity.User;
+import sembrella.ng.simrella.ng.exceptions.ResourceNotFoundException;
 import sembrella.ng.simrella.ng.exceptions.UserNotFoundException;
 import sembrella.ng.simrella.ng.repository.LoanRepository;
 import sembrella.ng.simrella.ng.repository.TransactionRepository;
 import sembrella.ng.simrella.ng.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TransactionService {
@@ -38,5 +41,15 @@ private UserRepository userRepository;
         transaction.setLoan(loan.get());
         transaction.setUser(user.get());
         return transactionRepository.save(transaction);
+    }
+    public Transaction getTransactionById(UUID id) {
+        return transactionRepository.findById(id)
+                .orElseThrow(() ->
+                     new ResourceNotFoundException("Transaction not found")
+                );
+    }
+
+    public List<Transaction> getTransactions(){
+        return transactionRepository.findAll();
     }
 }
