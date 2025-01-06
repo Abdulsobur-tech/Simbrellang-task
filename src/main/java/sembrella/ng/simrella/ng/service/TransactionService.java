@@ -1,0 +1,42 @@
+package sembrella.ng.simrella.ng.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import sembrella.ng.simrella.ng.dto.TransactionDto;
+import sembrella.ng.simrella.ng.entity.Loan;
+import sembrella.ng.simrella.ng.entity.Transaction;
+import sembrella.ng.simrella.ng.entity.User;
+import sembrella.ng.simrella.ng.exceptions.UserNotFoundException;
+import sembrella.ng.simrella.ng.repository.LoanRepository;
+import sembrella.ng.simrella.ng.repository.TransactionRepository;
+import sembrella.ng.simrella.ng.repository.UserRepository;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+@Service
+public class TransactionService {
+    @Autowired
+    private TransactionRepository transactionRepository;
+@Autowired
+private LoanRepository loanRepository;
+@Autowired
+private UserRepository userRepository;
+    public Transaction recordTransaction(TransactionDto transactionDto){
+        Optional<Loan> loan = loanRepository.findById(transactionDto.getLoanId());
+
+        if (transactionDto.getAmount() <= 0) {
+            throw new IllegalArgumentException("Transaction amount must be positive");
+
+        }
+        Optional<User> user = userRepository.findById(loan.get().getUserId());
+
+        Transaction transaction = new Transaction();
+        transaction.setTransactionDate(LocalDateTime.now());
+        transaction.setAmount(transactionDto.getAmount());
+        transaction.setType(transactionDto.getTransactionType());
+        transaction.setLoan(loan.get());
+        transaction.setUser(user.get());
+        return transactionRepository.save(transaction);
+    }
+}
