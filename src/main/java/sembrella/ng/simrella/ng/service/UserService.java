@@ -12,6 +12,7 @@ import sembrella.ng.simrella.ng.entity.User;
 import sembrella.ng.simrella.ng.enums.UserRoles;
 import sembrella.ng.simrella.ng.exceptions.DuplicateException;
 import sembrella.ng.simrella.ng.repository.UserRepository;
+import sembrella.ng.simrella.ng.utils.EmailService;
 import sembrella.ng.simrella.ng.utils.UserUtils;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,8 @@ public class UserService {
     private JwtService jwtService;
 @Autowired
     AuthenticationManager authManager;
+@Autowired
+private EmailService emailService;
     public User saveUser(User user){
 if (userRepository.findByEmail(user.getEmail()).isPresent()){
     throw new DuplicateException("Email already exist " );
@@ -46,6 +49,7 @@ if (user.getRoles() == null){
 user.getRoles().add(UserRoles.USER);
   user.setPassword(hashedPassword);
   user.setCreated_at(LocalDateTime.now());
+  emailService.sendRegistrationEmail(user.getEmail(), user.getFirstName() + " " + user.getLastName());
    return userRepository.save(user);
     }
 
