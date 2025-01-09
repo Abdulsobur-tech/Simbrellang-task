@@ -6,16 +6,24 @@ import sembrella.ng.simrella.ng.entity.AuditLogging;
 import sembrella.ng.simrella.ng.exceptions.UserNotFoundException;
 import sembrella.ng.simrella.ng.repository.AuditLoggingRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 @Service
 public class AuditLoggingService {
    @Autowired
     private AuditLoggingRepository auditLoggingRepository;
+
+    public AuditLoggingService() {
+    }
+
     public AuditLogging getAuditById(UUID id){
        AuditLogging auditLogging = auditLoggingRepository.findById(id)
                .orElseThrow(() -> new UserNotFoundException("Audit not found"));
 
        return auditLogging;
+    }
+    public List<AuditLogging> getAllAudit(){
+        return  auditLoggingRepository.findAll();
     }
 }

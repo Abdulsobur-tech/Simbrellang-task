@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sembrella.ng.simrella.ng.entity.AuditLogging;
 import sembrella.ng.simrella.ng.service.AuditLoggingService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,5 +21,10 @@ public class AuditController {
     public ResponseEntity<AuditLogging> getAuditById(@PathVariable UUID id){
         AuditLogging auditLogging = auditLoggingService.getAuditById(id);
         return ResponseEntity.ok(auditLogging);
+    }
+    @GetMapping("/audits")
+    public ResponseEntity<List<AuditLogging>> getAllAudit(){
+        List<AuditLogging> auditLoggingList = auditLoggingService.getAllAudit();
+        return ResponseEntity.ok(auditLoggingList);
     }
 }
