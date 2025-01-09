@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import sembrella.ng.simrella.ng.dto.LoanDto;
 import sembrella.ng.simrella.ng.dto.UpdateLoanStatusDto;
 import sembrella.ng.simrella.ng.dto.UserDto;
+import sembrella.ng.simrella.ng.entity.AuditLogging;
 import sembrella.ng.simrella.ng.entity.Loan;
 import sembrella.ng.simrella.ng.entity.User;
 import sembrella.ng.simrella.ng.enums.LoanStatus;
@@ -40,6 +41,7 @@ public class LoanService {
         loan.setTenureInMonth(loanDto.getLoanTenureInMonths());
         loan.setInterestRate(calculateInterestRate(loanDto.getLoanAmount(), loanDto.getLoanTenureInMonths()));
         loan.setStatus(LoanStatus.PENDING);
+
         return loanRepository.save(loan);
     }
 
@@ -64,6 +66,7 @@ public class LoanService {
         Loan loan = loanOptional.get();
         loan.setStatus(updateLoanStatusDto.getStatus());
         loan.setUpdated_at(LocalDateTime.now());
+
         return loanRepository.save(loan);
     }
 
